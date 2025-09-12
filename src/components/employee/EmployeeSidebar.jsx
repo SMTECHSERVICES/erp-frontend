@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
     { name: 'Dashboard', icon: <FiLayout className="text-xl" />, to: '/employee/dashboard' },
     { name: 'Attendance', icon: <FiUsers className="text-xl" />, to: '/employee/attendance' },
     { name: 'Task', icon: <FiList className="text-xl" />, to: '/employee/task' },
+    {name:'All Task',icon:<FiList className='text-xl' />, to:"/employee/allTasks"},
    
   ];
 

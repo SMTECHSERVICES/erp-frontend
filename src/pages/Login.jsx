@@ -108,11 +108,11 @@ const Login = () => {
         {/* BRAND LOGO */}
         <div className="text-center mb-8">
           <img
-            src="/logo1.png"
-            alt="SM Services Logo"
+            src="/logo11.png"
+            alt="VR Logo"
             className="mx-auto w-24 h-auto mb-4"
           />
-          <h2 className="text-2xl font-bold text-gray-800">Welcome Back</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Welcome Back ERP</h2>
           <p className="text-gray-500">Please login to continue</p>
         </div>
 
@@ -292,9 +292,20 @@ const Login = () => {
         )}
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        {/* <div className="mt-6 text-center text-sm text-gray-500">
           <p>Need help? Contact info@smservice.co.in</p>
-        </div>
+        </div> */}
+       <div className="mt-6 text-center text-m">
+  <a href="https://www.smservice.co.in/software" target='_blank'>Need help? Contact
+    <img
+      src="/smlogo.png" // replace with your actual logo file path
+      alt="SM Service Logo"
+      className="mx-auto h-8 w-auto hover:opacity-80 transition"
+    />
+  </a>
+</div>
+
+
       </div>
     </div>
   );

@@ -14,9 +14,14 @@ import toast from 'react-hot-toast';
   const menuItems = [
     { name: 'Dashboard', icon: <FiLayout className="text-xl" />, to: '/admin/dashboard' },
     { name: 'Employees', icon: <FiUsers className="text-xl" />, to: '/superVisor-admin/employees' },
+        { name: 'Register Employee', icon: <FiUserPlus className="text-xl" />, to: '/superVisor-admin/register' },
+    { name: 'Raw material ', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/raw-material' },
+
+    {name:"Part NO",icon: <FiUsers className="text-xl" />, to: '/superVisor-admin/getPartNo'},
     { name: 'Inventory', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/inventory' },
-    { name: 'Register Employee', icon: <FiUserPlus className="text-xl" />, to: '/superVisor-admin/register' },
-    { name: 'Production', icon: <FiSettings className="text-xl" />, to: '/superVisor-admin/production' },
+        { name: 'Schedule', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/schedule' },
+    
+    // { name: 'Production', icon: <FiSettings className="text-xl" />, to: '/superVisor-admin/production' },
     { name: 'Task', icon: <FiList className="text-xl" />, to: '/superVisor-admin/task' },
   ];
 

@@ -18,7 +18,19 @@ const AssignTaskPage = lazy(()=>import('./components/AssignTask'))
 const AdminDashboardPage = lazy(()=>import('./pages/admin/AdminDashboard'));
 const EmployeeDashboardPage = lazy(()=>import('./pages/employee/EmployeeDashboard'));
 const EmployeeTaskPage = lazy(()=>import('./pages/employee/EmployeeTask'));
-const TasksPage = lazy(()=>import('./pages/supervisor/Tasks'))
+const TasksPage = lazy(()=>import('./pages/supervisor/Tasks'));
+const AddPartNoPage = lazy(()=>import("./pages/supervisor/AddPartNo"));
+const GetPartNoPage = lazy(()=>import('./pages/supervisor/GetPartNo'));
+const GetPartDetailsPage = lazy(()=>import('./pages/supervisor/GetPartDetails'));
+const ScheduleFormPage = lazy(()=>import('./pages/supervisor/ScheduleForm'));
+const SchedulePage = lazy(()=>import("./pages/supervisor/Schedules"));
+const PartNoSchedulePage = lazy(()=>import('./pages/supervisor/PartNoSchedule'));
+const PartNoInventoryPage = lazy(()=>import('./pages/supervisor/GetPartNoInventory'));
+const UpdatPartNoDetailPage = lazy(()=>import('./pages/supervisor/UpdatePartNoInfo'));
+const EmployeeAllTasksPage = lazy(()=>import("./pages/employee/EmployeeAllTasks"));
+const PartNoOperationsPage = lazy(()=>import("./pages/supervisor/PartNoOperaions"));
+const RawMaterialPage = lazy(()=>import("./pages/supervisor/RawMaterial"));
+const InvoicePage = lazy(()=>import('./pages/supervisor/Invoice'))
 import { useAuthStore } from './store/useAuthStore';
 
 function App() {
@@ -74,16 +86,29 @@ function App() {
        
 
           {/*  EMPLOYEE ROUTES */}
+          {/* <Route path='/superVisor-admin/scheduleForm' element={<ScheduleFormPage />} />
+          <Route path='/superVisor-admin/schedule' element={<SchedulePage />} /> */}
 
-          <Route path='employee/dashboard' element={<EmployeeDashboardPage />} />
+          <Route path='/employee/dashboard' element={<EmployeeDashboardPage />} />
            <Route path='/employee/attendance' element={<MarkAttendancePage />} />
+            <Route path='/employee/allTasks' element={<EmployeeAllTasksPage />} />
        
           <Route path='/employee/task' element={<EmployeeTaskPage />} />
-          <Route path='employee/dashboard' element={<MarkAttendancePage />} />
+          {/* <Route path='employee/dashboard' element={<MarkAttendancePage />} /> */}
 
 
       {/* {  COMMON ROUTES FOR SUPERVISOR AND ADMIN} */}
+      <Route path='/superVisor-admin/raw-material' element={<RawMaterialPage />} />
+      <Route path='/superVisor-admin/invoice' element={<InvoicePage />} />
         <Route path='/superVisor-admin/inventory' element={<InventoryPage />} />
+        <Route path='/supervisor-admin/updatePartNoDetail/:id' element={<UpdatPartNoDetailPage />} />
+        <Route path='/superVisor-admin/partNoSchedule/:id' element={<PartNoSchedulePage />} />
+          <Route path='/superVisor-admin/partNoInventory/:id' element={<PartNoInventoryPage />} />
+          <Route path='/superVisor-admin/partNo/operation/:id' element={<PartNoOperationsPage />} />
+
+        <Route path='/superVisor-admin/AddpartNo' element={<AddPartNoPage />} />
+        <Route path='/superVisor-admin/getPartNo' element={<GetPartNoPage />} />
+         <Route path='/superVisor-admin/getPartDetatils/:id' element={<GetPartDetailsPage />} />
           <Route path='/superVisor-admin/task' element={<TasksPage />} />
         <Route path='/superVisor-admin/inventory-Detail/:productId' element={<InvetoryProductDetailPage />} />
           <Route path='/superVisor-admin/production' element={<ProductionPage />} />
@@ -92,6 +117,8 @@ function App() {
             <Route path='/superVisor-admin/employee-detail/:workerId' element={<EmployeeDetailPage />} />
            <Route path='/superVisor-admin/register' element={<RegisterEmployeePage />} />
            <Route path="/superVisor-admin/assign-task/:workerId" element={<AssignTaskPage />} />
+             <Route path='/superVisor-admin/scheduleForm' element={<ScheduleFormPage />} />
+          <Route path='/superVisor-admin/schedule' element={<SchedulePage />} />
 
           {/* ADMIN RELATED ROUTES */}
 <Route path="/admin/dashboard" element={<AdminDashboardPage />} />

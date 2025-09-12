@@ -78,7 +78,6 @@ const Employees = () => {
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="border p-2">Name</th>
-                    <th className="border p-2">Email</th>
                     <th className="border p-2">Phone</th>
                     <th className="border p-2">Role</th>
                     <th className="border p-2">Status</th>
@@ -89,7 +88,6 @@ const Employees = () => {
                   {data?.employees?.map((emp) => (
                     <tr key={emp._id}>
                       <td className="border p-2">{emp.name}</td>
-                      <td className="border p-2">{emp.email}</td>
                       <td className="border p-2">{emp.phone}</td>
                       <td className="border p-2">{emp.role}</td>
                       <td className="border p-2">

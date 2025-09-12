@@ -1,152 +1,153 @@
-import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { server } from '../constants/api';
-import toast from 'react-hot-toast';
 
-const CreateProduct = ({ onClose }) => {
-  const [formData, setFormData] = useState({
-    productId: '',
-    name: '',
-    category: '',
-    quantity: '',
-    unit: '',
-    type: 'IN',
-    reason: '',
-  });
 
-  const addProduct = async (data) => {
-    const res = await axios.post(`${server}/supervisor-admin/addProductTo-inventory`, data, {
-      withCredentials: true,
-    });
-    return res.data;
+
+
+import React, { useState } from "react";
+import axios from "axios";
+import { server } from "../constants/api";
+
+const CreateProduct = () => {
+  const [partNo, setPartNo] = useState("");
+  const [quantities, setQuantities] = useState([
+    { type: "CUTTING", quantity: "", unit: "pcs" },
+  ]);
+
+  // Available dropdown options
+  const typeOptions = [ "CUTTING", "LATHE", "CNC", "FINISHED"];
+  const unitOptions = ["pcs", "kg"];
+
+  // ✅ Add new row
+  const addQuantityRow = () => {
+    setQuantities([...quantities, { type: "CUTTING", quantity: 0, unit: "pcs" }]);
   };
 
-  const { mutate, isPending, isSuccess, isError, error } = useMutation({
-    mutationFn: addProduct,
-    onSuccess: () => {
-      toast.success('✅ Product added successfully!');
-      setFormData({
-        productId: '',
-        name: '',
-        category: '',
-        quantity: '',
-        unit: '',
-        type: 'IN',
-        reason: '',
-      });
-      if (onClose) onClose();
-    },
-    onError: (err) => {
-      console.error(err);
-      toast.error(err?.response?.data?.message || '❌ Failed to add product');
-    },
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // ✅ Remove row
+  const removeQuantityRow = (index) => {
+    const newQuantities = [...quantities];
+    newQuantities.splice(index, 1);
+    setQuantities(newQuantities);
   };
 
-  const handleSubmit = (e) => {
+  // ✅ Handle input change
+  const handleQuantityChange = (index, field, value) => {
+    const newQuantities = [...quantities];
+    if (field === "quantity") {
+      newQuantities[index][field] = value === "" ? "" : Number(value);
+    } else {
+      newQuantities[index][field] = value;
+    }
+    setQuantities(newQuantities);
+  };
+
+  // ✅ Submit to backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    mutate(formData);
+    try {
+      const res = await axios.post(
+        `${server}/supervisor-admin/create-inventory`,
+        {
+          partNo,
+          quantities,
+        },
+        { withCredentials: true }
+      );
+      alert("Inventory Created Successfully!");
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Error creating inventory");
+    }
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Create New Product</h2>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h2 className="text-xl font-bold mb-4">Create Inventory</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="productId"
-          placeholder="Product ID"
-          value={formData.productId}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Product Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        >
-          <option value="">Select Category</option>
-          <option value="Raw">Raw Material</option>
-          <option value="Finished">Finished Product</option>
-          <option value="Packaging">Packaging</option>
-          <option value="Other">Other</option>
-        </select>
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          min="0"
-          required
-        />
-        <input
-          type="text"
-          name="unit"
-          placeholder="Unit (e.g. kg, pcs)"
-          value={formData.unit}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        {/* <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        >
-          <option value="IN">IN</option>
-          <option value="OUT">OUT</option>
-        </select> */}
-        <textarea
-          name="reason"
-          placeholder="Reason"
-          value={formData.reason}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          rows="3"
-          required
-        />
-        <div className="flex justify-end gap-2">
-          {onClose && (
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded hover:bg-gray-100"
-            >
-              Cancel
-            </button>
-          )}
+        {/* Part Number */}
+        <div>
+          <label className="block mb-1 font-medium">Part No (ObjectId)</label>
+          <input
+            type="text"
+            value={partNo}
+            onChange={(e) => setPartNo(e.target.value)}
+            className="border px-3 py-2 w-full rounded"
+            required
+          />
+        </div>
+
+        {/* Quantities */}
+        <div>
+          <label className="block mb-2 font-medium">Quantities</label>
+          {quantities.map((q, index) => (
+            <div key={index} className="flex space-x-2 mb-2">
+              {/* Type dropdown */}
+              <select
+                value={q.type}
+                onChange={(e) =>
+                  handleQuantityChange(index, "type", e.target.value)
+                }
+                className="border px-2 py-1 rounded w-1/3"
+              >
+                {typeOptions.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+
+              {/* Quantity input */}
+              <input
+                type="number"
+                placeholder="Quantity"
+                value={q.quantity}
+                onChange={(e) =>
+                  handleQuantityChange(index, "quantity", e.target.value)
+                }
+                className="border px-2 py-1 rounded w-1/3"
+                required
+              />
+
+              {/* Unit dropdown */}
+              <select
+                value={q.unit}
+                onChange={(e) =>
+                  handleQuantityChange(index, "unit", e.target.value)
+                }
+                className="border px-2 py-1 rounded w-1/3"
+              >
+                {unitOptions.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+
+              {/* Remove Row Button */}
+              <button
+                type="button"
+                onClick={() => removeQuantityRow(index)}
+                className="bg-red-500 text-white px-2 rounded"
+              >
+                X
+              </button>
+            </div>
+          ))}
           <button
-            type="submit"
-            disabled={isPending}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            type="button"
+            onClick={addQuantityRow}
+            className="bg-blue-500 text-white px-3 py-1 rounded"
           >
-            {isPending ? 'Submitting...' : 'Submit'}
+            + Add Row
           </button>
         </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-2 rounded"
+        >
+          Save Inventory
+        </button>
       </form>
     </div>
   );

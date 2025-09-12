@@ -1,63 +1,39 @@
+
+
+
+
 import React, { useState } from 'react';
-import { useQuery, useMutation, QueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { server } from '../../constants/api';
-import { FiPlus, FiEdit, FiTrash2, FiSearch, FiEye } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 import SupervisorLayout from '../../layout/SupervisorLayout';
 import AdminLayout from '../../layout/AdminLayout';
 import { useAuthStore } from '../../store/useAuthStore';
 import CreateProduct from '../../components/CreateProduct';
 import { useNavigate } from 'react-router-dom';
 
-//const queryClient = new QueryClient();
-
 const Inventory = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [productIdFilter, setProductIdFilter] = useState('');
+  const [partFilter, setPartFilter] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newItem, setNewItem] = useState({
-    productId: '',
-    name: '',
-    category: '',
-    quantity: 0
-  });
 
   const role = useAuthStore((state) => state.role);
   const isUserLoading = useAuthStore((state) => state.isUserLoading);
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['inventory', page, limit, productIdFilter],
+    queryKey: ['inventory', page, limit, partFilter],
     queryFn: async () => {
       const response = await axios.get(`${server}/supervisor-admin/inventoryItem`, {
-        params: { page, limit, productId: productIdFilter || undefined },
+        params: { page, limit, partNo: partFilter || undefined },
         withCredentials: true
       });
       return response.data;
     },
     keepPreviousData: true
   });
-
-  // const createMutation = useMutation({
-  //   mutationFn: (item) => axios.post(server.inventory.create, item),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(['inventory']);
-  //     setShowCreateModal(false);
-  //     setNewItem({ productId: '', name: '', category: '', quantity: 0 });
-  //   }
-  // });
-
-  // const handleCreate = () => createMutation.mutate(newItem);
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setNewItem((prev) => ({
-  //     ...prev,
-  //     [name]: name === 'quantity' ? parseInt(value) || 0 : value
-  //   }));
-  // };
-
-  const navigate = useNavigate()
 
   if (isUserLoading) {
     return <div className="flex justify-center items-center h-screen text-xl">Loading user data...</div>;
@@ -72,13 +48,16 @@ const Inventory = () => {
 
         {/* Filter + Add */}
         <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
-          <form onSubmit={(e) => { e.preventDefault(); setPage(1); }} className="flex flex-col sm:flex-row gap-2">
+          <form
+            onSubmit={(e) => { e.preventDefault(); setPage(1); }}
+            className="flex flex-col sm:flex-row gap-2"
+          >
             <div className="relative w-full sm:w-auto">
               <input
                 type="text"
-                placeholder="Filter by Product ID"
-                value={productIdFilter}
-                onChange={(e) => setProductIdFilter(e.target.value)}
+                placeholder="Filter by Part No"
+                value={partFilter}
+                onChange={(e) => setPartFilter(e.target.value)}
                 className="w-full sm:w-64 pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <FiSearch className="absolute left-3 top-3 text-gray-400" />
@@ -107,28 +86,40 @@ const Inventory = () => {
               <table className="min-w-full text-sm md:text-base">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="py-3 px-4 text-left">Product ID</th>
-                    <th className="py-3 px-4 text-left">Name</th>
-                    <th className="py-3 px-4 text-left">Category</th>
-                    <th className="py-3 px-4 text-left">Quantity</th>
+                    <th className="py-3 px-4 text-left">Part No</th>
+                    <th className="py-3 px-4 text-left">Cutting</th>
+                    <th className="py-3 px-4 text-left">Lathe</th>
+                    <th className="py-3 px-4 text-left">CNC</th>
+                    <th className="py-3 px-4 text-left">Finished</th>
+                    <th className="py-3 px-4 text-left">Total Stock</th>
                     <th className="py-3 px-4 text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.items.map((item) => (
-                    <tr key={item._id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">{item.productId}</td>
-                      <td className="py-3 px-4">{item.name}</td>
-                      <td className="py-3 px-4">{item.category}</td>
-                      <td className="py-3 px-4">{item.quantity}</td>
-                      <td className="py-3 px-4">
-                        <div className="flex space-x-2">
-                          <button onClick={()=>{navigate(`/superVisor-admin/inventory-Detail/${item.productId}`)}} className="text-blue-500 hover:text-blue-700">View details</button>
-                          
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {data.items.map((item) => {
+                    const qtyMap = item.quantities.reduce((acc, q) => {
+                      acc[q.type] = `${q.quantity} ${q.unit}`;
+                      return acc;
+                    }, {});
+                    return (
+                      <tr key={item._id} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4">{item.partNo?.partNo}</td>
+                        <td className="py-3 px-4">{qtyMap.CUTTING || '-'}</td>
+                        <td className="py-3 px-4">{qtyMap.LATHE || '-'}</td>
+                        <td className="py-3 px-4">{qtyMap.CNC || '-'}</td>
+                        <td className="py-3 px-4">{qtyMap.FINISHED || '-'}</td>
+                        <td className="py-3 px-4 font-semibold">{item.totalStockInHand}</td>
+                        <td className="py-3 px-4">
+                          <button
+                            onClick={() => navigate(`/superVisor-admin/partNoInventory/${item.partNo?._id}`)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            View details
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
 
@@ -170,24 +161,22 @@ const Inventory = () => {
         </div>
 
         {/* Create Modal */}
-      {showCreateModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div className="bg-white rounded-lg w-full max-w-xl">
-      <div className="p-6 relative">
-        {/* Close Button */}
-        <button
-          onClick={() => setShowCreateModal(false)}
-          className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
-        >
-          &times;
-        </button>
-
-        {/* Inject your component */}
-        <CreateProduct onClose={() => setShowCreateModal(false)} />
-      </div>
-    </div>
-  </div>
-)}
+        {showCreateModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg w-full max-w-xl">
+              <div className="p-6 relative">
+                {/* Close Button */}
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
+                >
+                  &times;
+                </button>
+                <CreateProduct onClose={() => setShowCreateModal(false)} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
