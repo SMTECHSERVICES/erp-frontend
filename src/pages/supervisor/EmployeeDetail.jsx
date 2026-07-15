@@ -725,6 +725,11 @@ const EmployeeDetail = () => {
   const [progressEndDate, setProgressEndDate] = useState('');
   const [appliedProgressRange, setAppliedProgressRange] = useState(null); // { start: Date, end: Date } or null
 
+  // Reset password state
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+
   // -----------------------
   // Hooks: queries (all are top-level)
   // -----------------------
@@ -847,6 +852,26 @@ const EmployeeDetail = () => {
     setProgressEndDate('');
   };
 
+  // Reset employee password handler
+  const handleResetPassword = async () => {
+    const pwd = newPassword.trim() || 'vr@123';
+    setIsResettingPassword(true);
+    try {
+      await axios.patch(
+        `${server}/supervisor-admin/reset-employee-password/${workerId}`,
+        { newPassword: pwd },
+        { withCredentials: true }
+      );
+      toast.success(`✅ Password reset to: ${pwd}`);
+      setShowResetPassword(false);
+      setNewPassword('');
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to reset password');
+    } finally {
+      setIsResettingPassword(false);
+    }
+  };
+
   const handleApplyProgressRange = () => {
     if (!progressStartDate || !progressEndDate) {
       return toast.error('Please select both start and end dates for progress filter');
@@ -870,12 +895,20 @@ const EmployeeDetail = () => {
       <div className="p-4 md:p-6 max-w-5xl mx-auto">
         <h1 className="text-xl md:text-2xl font-bold mb-6">Employee Detail</h1>
 
-        <div className="mb-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+        <div className="mb-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 flex-wrap">
           <button
             onClick={() => navigate(`/superVisor-admin/assign-task/${workerId}`)}
             className="bg-green-600 text-white px-4 py-2 rounded text-sm md:text-base hover:bg-green-700"
           >
             Assign Task to Worker
+          </button>
+
+          {/* Reset Password Button */}
+          <button
+            onClick={() => setShowResetPassword(true)}
+            className="bg-orange-500 text-white px-4 py-2 rounded text-sm md:text-base hover:bg-orange-600"
+          >
+            🔑 Reset Password
           </button>
 
           <div className="flex gap-2">
@@ -893,6 +926,39 @@ const EmployeeDetail = () => {
             </button>
           </div>
         </div>
+
+        {/* Reset Password Modal */}
+        {showResetPassword && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+              <h2 className="text-lg font-bold mb-4">Reset Password for {worker.name}</h2>
+              <input
+                type="text"
+                placeholder="Enter new password (min 4 chars)"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full border p-2 rounded mb-2 focus:ring-2 focus:ring-orange-400 outline-none"
+              />
+              <p className="text-xs text-gray-500 mb-4">Leave blank to reset to default: <strong>vr@123</strong></p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => { setShowResetPassword(false); setNewPassword(''); }}
+                  className="px-4 py-2 border rounded hover:bg-gray-100 text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleResetPassword}
+                  disabled={isResettingPassword}
+                  className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm disabled:opacity-60"
+                >
+                  {isResettingPassword ? 'Resetting...' : 'Reset'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
 
         {/* Worker Info */}
         <div className="bg-white p-3 md:p-6 rounded shadow mb-8">

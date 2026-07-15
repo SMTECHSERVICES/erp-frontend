@@ -399,7 +399,7 @@ useEffect(() => {
         latheSeconds: ls,
         drawingFileUrl: part.drawingFileUrl,
       });
-    } catch (err) {
+    } catch {
       setMessage("Failed to load part details");
     }
   };
@@ -469,7 +469,7 @@ useEffect(() => {
       );
 
       toast.success(res?.data?.message);
-      navigate(`/supervisor-admin/getPartDetatils/${id}`);
+      navigate(`/superVisor-admin/getPartDetatils/${id}`);
     } catch (err) {
       setMessage(err.response?.data?.message || "Update failed");
     } finally {

@@ -136,7 +136,6 @@ import toast from "react-hot-toast";
 const GetPartDetails = () => {
   const { id } = useParams(); // get id from url
   const role = useAuthStore((state) => state.role);
-  const isUserLoading = useAuthStore((state) => state.isUserLoading);
   const Layout = role === "SUPERVISOR" ? SupervisorLayout : AdminLayout;
   const navigate = useNavigate();
 
@@ -178,7 +177,7 @@ const GetPartDetails = () => {
   }
 
   const handleEdit = () => {
-    navigate(`/supervisor-admin/updatePartNoDetail/${part._id}`, {
+    navigate(`/superVisor-admin/updatePartNoDetail/${part._id}`, {
       state: { part },
     });
   };

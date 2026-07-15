@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { server } from '../../constants/api';
 import { useAuthStore } from '../../store/useAuthStore';
 import SupervisorLayout from '../../layout/SupervisorLayout';
 import AdminLayout from '../../layout/AdminLayout';
-import toast from 'react-hot-toast';
 import CreateProduction from '../../components/CreateProduction';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +24,7 @@ const Production = () => {
   const [inputBatchId, setInputBatchId] = useState('');
   const [batchIdFilter, setBatchIdFilter] = useState('');
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['productions', page, limit, status, batchIdFilter],
     queryFn: async () => {
       const res = await axios.get(`${server}/supervisor-admin/get-Productions`, {
@@ -42,22 +41,7 @@ const Production = () => {
     keepPreviousData: true
   });
 
-  const createProduction = useMutation({
-    mutationFn: async (data) => {
-      const res = await axios.post(`${server}/supervisor-admin/create-production`, data, {
-        withCredentials: true
-      });
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success('Production added successfully');
-      setShowModal(false);
-      refetch();
-    },
-    onError: (err) => {
-      toast.error(err.response?.data?.message || 'Failed to create production');
-    }
-  });
+
 
   const handleApplyFilter = () => {
     setBatchIdFilter(inputBatchId);

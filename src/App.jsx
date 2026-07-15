@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast';
 import './App.css'
 import Loader from './components/Loader';
@@ -30,7 +30,21 @@ const UpdatPartNoDetailPage = lazy(()=>import('./pages/supervisor/UpdatePartNoIn
 const EmployeeAllTasksPage = lazy(()=>import("./pages/employee/EmployeeAllTasks"));
 const PartNoOperationsPage = lazy(()=>import("./pages/supervisor/PartNoOperaions"));
 const RawMaterialPage = lazy(()=>import("./pages/supervisor/RawMaterial"));
-const InvoicePage = lazy(()=>import('./pages/supervisor/Invoice'))
+const InvoicePage = lazy(()=>import('./pages/supervisor/Invoice'));
+
+// New Workflow lazy routes
+const PurchasePage = lazy(() => import('./pages/supervisor/Purchase'));
+const MaterialIssuePage = lazy(() => import('./pages/supervisor/MaterialIssue'));
+const MachineProductionPage = lazy(() => import('./pages/supervisor/MachineProduction'));
+const QualityInspectionPage = lazy(() => import('./pages/supervisor/QualityInspection'));
+const FinishedGoodsPage = lazy(() => import('./pages/supervisor/FinishedGoods'));
+const SalesOrderPage = lazy(() => import('./pages/supervisor/SalesOrder'));
+const StockReservationPage = lazy(() => import('./pages/supervisor/StockReservation'));
+const DispatchPlanningPage = lazy(() => import('./pages/supervisor/DispatchPlanning'));
+const PackingPage = lazy(() => import('./pages/supervisor/Packing'));
+const DispatchPage = lazy(() => import('./pages/supervisor/Dispatch'));
+const PaymentPage = lazy(() => import('./pages/supervisor/Payment'));
+
 import { useAuthStore } from './store/useAuthStore';
 
 function App() {
@@ -101,7 +115,7 @@ function App() {
       <Route path='/superVisor-admin/raw-material' element={<RawMaterialPage />} />
       <Route path='/superVisor-admin/invoice' element={<InvoicePage />} />
         <Route path='/superVisor-admin/inventory' element={<InventoryPage />} />
-        <Route path='/supervisor-admin/updatePartNoDetail/:id' element={<UpdatPartNoDetailPage />} />
+        <Route path='/superVisor-admin/updatePartNoDetail/:id' element={<UpdatPartNoDetailPage />} />
         <Route path='/superVisor-admin/partNoSchedule/:id' element={<PartNoSchedulePage />} />
           <Route path='/superVisor-admin/partNoInventory/:id' element={<PartNoInventoryPage />} />
           <Route path='/superVisor-admin/partNo/operation/:id' element={<PartNoOperationsPage />} />
@@ -119,6 +133,19 @@ function App() {
            <Route path="/superVisor-admin/assign-task/:workerId" element={<AssignTaskPage />} />
              <Route path='/superVisor-admin/scheduleForm' element={<ScheduleFormPage />} />
           <Route path='/superVisor-admin/schedule' element={<SchedulePage />} />
+
+          {/* New Workflow Routes */}
+          <Route path='/superVisor-admin/purchase' element={<PurchasePage />} />
+          <Route path='/superVisor-admin/material-issue' element={<MaterialIssuePage />} />
+          <Route path='/superVisor-admin/machine-production' element={<MachineProductionPage />} />
+          <Route path='/superVisor-admin/quality-inspection' element={<QualityInspectionPage />} />
+          <Route path='/superVisor-admin/finished-goods' element={<FinishedGoodsPage />} />
+          <Route path='/superVisor-admin/sales-order' element={<SalesOrderPage />} />
+          <Route path='/superVisor-admin/stock-reservation' element={<StockReservationPage />} />
+          <Route path='/superVisor-admin/dispatch-planning' element={<DispatchPlanningPage />} />
+          <Route path='/superVisor-admin/packing' element={<PackingPage />} />
+          <Route path='/superVisor-admin/dispatch' element={<DispatchPage />} />
+          <Route path='/superVisor-admin/payment' element={<PaymentPage />} />
 
           {/* ADMIN RELATED ROUTES */}
 <Route path="/admin/dashboard" element={<AdminDashboardPage />} />

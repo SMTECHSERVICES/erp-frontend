@@ -15,7 +15,7 @@ const fetchDashboardData = async () => {
       withCredentials: true,
     });
     return response.data; // ✅ Axios keeps data in `response.data`
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch dashboard data');
   }
 };

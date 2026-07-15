@@ -5,7 +5,7 @@ import { server } from '../constants/api';
 
 export const useAuthStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       isAuthenticated: false,
       role: null,
       token: null,

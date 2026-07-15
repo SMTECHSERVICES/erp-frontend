@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { server } from '../constants/api';
 import { FiCalendar, FiClock, FiFilter, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { useAuthStore } from '../store/useAuthStore';
 
 const AttendanceTable = () => {
   const [page, setPage] = useState(1);

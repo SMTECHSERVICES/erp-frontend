@@ -2,7 +2,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  FiLayout, FiClock, FiUsers, FiPackage, FiUserPlus, FiSettings, FiList, FiLogOut
+  FiLayout, FiClock, FiUsers, FiPackage, FiUserPlus, FiSettings, FiList, FiLogOut,
+  FiShoppingCart, FiPlay, FiShare, FiCheckSquare, FiLayers, FiFileText, FiBookmark, FiTruck, FiDollarSign
 } from 'react-icons/fi';
 
 import { useAuthStore } from '../../store/useAuthStore'; // adjust path if needed
@@ -12,23 +13,27 @@ import toast from 'react-hot-toast';
 
 const menuItems = [
   { name: 'Dashboard', icon: <FiLayout className="text-xl" />, to: '/supervisor/dashboard' },
-
-
-  // { name: 'Production', icon: <FiSettings className="text-xl" />, to: '/superVisor-admin/production' },
+  { name: 'Purchase', icon: <FiShoppingCart className="text-xl" />, to: '/superVisor-admin/purchase' },
   { name: 'Raw material ', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/raw-material' },
+  { name: "Part NO", icon: <FiSettings className="text-xl" />, to: '/superVisor-admin/getPartNo' },
+  { name: 'Schedule', icon: <FiPlay className="text-xl" />, to: '/superVisor-admin/schedule' },
+  { name: 'Material Issue', icon: <FiShare className="text-xl" />, to: '/superVisor-admin/material-issue' },
+  { name: 'Machine Production', icon: <FiSettings className="text-xl" />, to: '/superVisor-admin/machine-production' },
+  { name: 'Quality Inspection', icon: <FiCheckSquare className="text-xl" />, to: '/superVisor-admin/quality-inspection' },
+  { name: 'Finished Goods', icon: <FiLayers className="text-xl" />, to: '/superVisor-admin/finished-goods' },
+  { name: 'Sales Order', icon: <FiFileText className="text-xl" />, to: '/superVisor-admin/sales-order' },
+  { name: 'Stock Reservation', icon: <FiBookmark className="text-xl" />, to: '/superVisor-admin/stock-reservation' },
+  { name: 'Dispatch Planning', icon: <FiPlay className="text-xl" />, to: '/superVisor-admin/dispatch-planning' },
+  { name: 'Packing', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/packing' },
+  { name: 'Dispatch', icon: <FiTruck className="text-xl" />, to: '/superVisor-admin/dispatch' },
+  { name: 'Invoice', icon: <FiFileText className="text-xl" />, to: '/superVisor-admin/invoice' },
+  { name: 'Payment', icon: <FiDollarSign className="text-xl" />, to: '/superVisor-admin/payment' },
 
-  { name: "Part NO", icon: <FiUsers className="text-xl" />, to: '/superVisor-admin/getPartNo' },
-  { name: 'Schedule', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/schedule' },
   { name: 'Inventory', icon: <FiPackage className="text-xl" />, to: '/superVisor-admin/inventory' },
   { name: 'Employees', icon: <FiUsers className="text-xl" />, to: '/superVisor-admin/employees' },
-    { name: 'Invoice', icon: <FiUsers className="text-xl" />, to: '/superVisor-admin/invoice' },
-
-
-
   { name: 'Register Employee', icon: <FiUserPlus className="text-xl" />, to: '/superVisor-admin/register' },
   { name: 'Task', icon: <FiList className="text-xl" />, to: '/superVisor-admin/task' },
   { name: 'Mark Attendance', icon: <FiClock className="text-xl" />, to: '/employee/attendance' },
-
 ];
 
 const SupervisorSidebar = ({ isOpen, toggleSidebar }) => {

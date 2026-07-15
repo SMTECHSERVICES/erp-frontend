@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { server } from "../../constants/api";
-import { useAuthStore } from "../../store/useAuthStore";
 import EmployeeLayout from "../../layout/EmployeeLayout";
 
-const EmployeeAllTasks = () => {
-  const role = useAuthStore((state) => state.role);
 
+
+const EmployeeAllTasks = () => {
 
   const [selectedDate, setSelectedDate] = useState("");
 

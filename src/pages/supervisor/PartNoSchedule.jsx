@@ -4,14 +4,12 @@ import SupervisorLayout from "../../layout/SupervisorLayout";
 import AdminLayout from "../../layout/AdminLayout";
 import axios from "axios";
 import { server } from "../../constants/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const PartNoSchedule = () => {
   const { id } = useParams();
   const role = useAuthStore((state) => state.role);
-  const isUserLoading = useAuthStore((state) => state.isUserLoading);
-  const navigate = useNavigate();
 
   const Layout = role === "SUPERVISOR" ? SupervisorLayout : AdminLayout;
 

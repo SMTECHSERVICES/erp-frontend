@@ -5,7 +5,6 @@ import { server } from '../../constants/api';
 import { useAuthStore } from '../../store/useAuthStore';
 import SupervisorLayout from '../../layout/SupervisorLayout';
 import AdminLayout from '../../layout/AdminLayout';
-import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 const Employees = () => {
