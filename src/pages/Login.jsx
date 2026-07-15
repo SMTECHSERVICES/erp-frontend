@@ -35,8 +35,9 @@ const Login = () => {
       setShowOtp(true);
       toast.success('OTP sent to your email');
     } catch (error) {
-      console.error('Error sending OTP:', error);
-      toast.error('Failed to send OTP');
+      console.error('Error sending OTP:', error.response ?? error);
+      const serverMessage = error?.response?.data?.message || error?.response?.data || null;
+      toast.error(serverMessage || `Failed to send OTP (${error.response?.status || 'unknown'})`);
     } finally {
       setLoading(false);
     }
